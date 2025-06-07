@@ -98,7 +98,7 @@
             text-align: center;
         }
         
-        /* 日期筛选控件 - 修改后 */
+        /* 日期筛选控件 */
         .date-filter {
             display: flex;
             gap: 10px;
@@ -109,28 +109,36 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             align-items: center;
             flex-wrap: nowrap;
-            overflow-x: auto;
         }
         
-        .date-filter-group {
-            min-width: 140px;
-            flex-shrink: 0;
+        .date-range-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
         }
         
-        .date-filter label {
-            display: block;
-            margin-bottom: 4px;
-            font-size: 0.85rem;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-        
-        .date-filter input {
-            width: 100%;
-            padding: 8px 12px;
+        .date-range-selector input {
+            padding: 8px;
             border: 1px solid var(--border);
             border-radius: 8px;
             font-size: 0.9rem;
+            width: 100%;
+        }
+        
+        .date-range-display {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-weight: 600;
+            padding: 0 10px;
+            min-width: 0;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 8px;
         }
         
         .filter-btn {
@@ -146,7 +154,6 @@
             align-items: center;
             gap: 5px;
             white-space: nowrap;
-            flex-shrink: 0;
         }
         
         .filter-btn:hover {
@@ -166,7 +173,6 @@
             align-items: center;
             gap: 5px;
             white-space: nowrap;
-            flex-shrink: 0;
         }
         
         .clear-filter-btn:hover {
@@ -269,12 +275,8 @@
             line-height: 1.3;
         }
         
-        /* 新增日期单元格样式 */
         .date-cell {
-            width: 100px;
-            text-align: center;
-            font-weight: 600;
-            color: var(--primary);
+            width: 90px;
         }
         
         .size-cell {
@@ -536,7 +538,6 @@
             font-size: 0.9rem;
         }
         
-        /* 居中Toast */
         .toast {
             position: fixed;
             top: 50%;
@@ -548,7 +549,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             z-index: 1001;
-            animation: toastCenter 0.3s ease-out;
+            animation: toastFade 0.3s ease-out;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -562,24 +563,61 @@
             background: rgba(231, 76, 60, 0.9);
         }
         
-        @keyframes toastCenter {
-            0% { opacity: 0; transform: translate(-50%, -40px); }
+        @keyframes toastFade {
+            0% { opacity: 0; transform: translate(-50%, -40%); }
             100% { opacity: 1; transform: translate(-50%, -50%); }
         }
         
-        /* 确认弹窗样式 */
-        .confirm-modal .modal-content {
-            max-width: 300px;
-            animation: modalOpen 0.3s ease;
-        }
-        
-        .confirm-modal .modal-body {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .confirm-modal .modal-footer {
+        /* 删除确认弹窗 */
+        .delete-confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
             justify-content: center;
+        }
+        
+        .delete-confirm-content {
+            background: white;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .delete-confirm-body {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .delete-confirm-footer {
+            display: flex;
+            padding: 12px 16px;
+            gap: 12px;
+        }
+        
+        /* 新增：日期选择器限制样式 */
+        .date-range-selector input:invalid {
+            border-color: var(--danger);
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+        
+        .date-range-selector input:invalid + span {
+            color: var(--danger);
+        }
+        
+        .date-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
         }
         
         @media (max-width: 480px) {
@@ -599,18 +637,22 @@
             }
             
             .date-filter {
-                flex-direction: row;
+                flex-direction: column;
                 gap: 8px;
-                flex-wrap: nowrap;
-                overflow-x: auto;
             }
             
-            .date-filter-group {
-                min-width: 140px;
+            .date-range-selector {
+                flex-direction: column;
             }
             
-            .filter-btn, .clear-filter-btn {
-                width: auto;
+            .date-range-display {
+                min-width: 0;
+                font-size: 0.9rem;
+            }
+            
+            .filter-controls {
+                width: 100%;
+                justify-content: space-between;
             }
             
             .stats-card {
@@ -692,16 +734,14 @@
                 font-size: 1.3rem;
             }
             
-            /* 手机端模态框居中显示 */
+            /* 手机端模态框居中 */
             .modal {
-                align-items: center !important;
-                padding: 15px;
+                align-items: center;
+                animation: none;
             }
             
             .modal-content {
-                max-width: 100%;
-                margin-bottom: 0;
-                animation: modalOpen 0.3s ease !important;
+                animation: modalOpen 0.3s ease;
             }
         }
     </style>
@@ -717,22 +757,22 @@
             </div>
         </header>
         
-        <!-- 日期筛选控件（已优化） -->
+        <!-- 日期筛选控件 -->
         <div class="date-filter">
-            <div class="date-filter-group">
-                <label for="start-date">开始日期</label>
-                <input type="date" id="start-date">
+            <div class="date-range-selector">
+                <input type="date" id="start-date-input" required>
+                <span>至</span>
+                <input type="date" id="end-date-input" required>
+                <div class="date-error" id="date-error">结束日期不能早于开始日期</div>
             </div>
-            <div class="date-filter-group">
-                <label for="end-date">结束日期</label>
-                <input type="date" id="end-date">
+            <div class="filter-controls">
+                <button class="filter-btn" id="apply-filter">
+                    <i class="fas fa-filter"></i> 筛选
+                </button>
+                <button class="clear-filter-btn" id="clear-filter">
+                    <i class="fas fa-times"></i> 清除
+                </button>
             </div>
-            <button class="filter-btn" id="apply-filter">
-                <i class="fas fa-filter"></i> 筛选
-            </button>
-            <button class="clear-filter-btn" id="clear-filter">
-                <i class="fas fa-times"></i> 清除
-            </button>
         </div>
         
         <div class="stats-card">
@@ -750,7 +790,7 @@
             </div>
             <div class="stat-item">
                 <div class="value" id="month-income">¥0</div>
-                <div class="label" id="income-label">总收入</div>
+                <div class="label" id="income-label">当月收入</div>
             </div>
         </div>
         
@@ -784,17 +824,23 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="clothing-style"><i class="fas fa-ruler"></i> 款式</label>
-                                <!-- 修改为支持自定义输入的datalist -->
-                                <input type="text" id="clothing-style" list="style-options" placeholder="输入或选择款式" required>
-                                <datalist id="style-options">
-                                    <option value="长裤">
-                                    <option value="短裤">
-                                </datalist>
+                                <select id="clothing-style" required>
+                                    <option value="">选择款式</option>
+                                    <option value="长裤">长裤</option>
+                                    <option value="短裤">短裤</option>
+                                    <option value="衬衫">衬衫</option>
+                                    <option value="外套">外套</option>
+                                    <option value="custom">其他款式</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="size"><i class="fas fa-ruler-combined"></i> 尺码</label>
-                                <input type="text" id="size" placeholder="输入尺码" required>
+                                <input type="text" id="size" placeholder="输入数字尺码" required pattern="\d+">
                             </div>
+                        </div>
+                        <div class="form-group" id="custom-style-group" style="display: none;">
+                            <label for="custom-style"><i class="fas fa-pen"></i> 款式名称</label>
+                            <input type="text" id="custom-style" placeholder="输入自定义款式名称">
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -814,6 +860,23 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 删除确认模态框 -->
+        <div class="delete-confirm-modal" id="delete-confirm-modal">
+            <div class="delete-confirm-content">
+                <div class="modal-header">
+                    <span>确认删除</span>
+                    <button class="close-modal" id="close-delete-modal">&times;</button>
+                </div>
+                <div class="delete-confirm-body">
+                    <p>确定要删除这条记录吗？删除后不可恢复</p>
+                </div>
+                <div class="delete-confirm-footer">
+                    <button class="btn btn-cancel" id="cancel-delete">取消</button>
+                    <button class="btn btn-save" id="confirm-delete">确定删除</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -828,6 +891,7 @@
     let filterStartDate = null;  // 筛选起始日期
     let filterEndDate = null;    // 筛选结束日期
     let isFilterApplied = false; // 是否处于筛选状态
+    let recordToDelete = null;   // 待删除记录ID
     
     // DOM元素绑定
     const monthDisplay = document.getElementById('current-month');
@@ -839,16 +903,19 @@
     const cancelRecordBtn = document.getElementById('cancel-record');
     const saveRecordBtn = document.getElementById('save-record');
     const tablesContainer = document.getElementById('tables-container');
-    const startDateInput = document.getElementById('start-date');
-    const endDateInput = document.getElementById('end-date');
     const applyFilterBtn = document.getElementById('apply-filter');
     const clearFilterBtn = document.getElementById('clear-filter');
-    const incomeLabelEl = document.getElementById('income-label');
+    const startDateInput = document.getElementById('start-date-input');
+    const endDateInput = document.getElementById('end-date-input');
+    const incomeLabel = document.getElementById('income-label');
+    const dateError = document.getElementById('date-error');
     
-    // 款式输入框（已改为input）
-    const clothingStyleInput = document.getElementById('clothing-style');
+    // 新增款式下拉框和单价输入框
+    const clothingStyleSelect = document.getElementById('clothing-style');
     const sizeInput = document.getElementById('size');
     const unitPriceInput = document.getElementById('unit-price');
+    const customStyleGroup = document.getElementById('custom-style-group');
+    const customStyleInput = document.getElementById('custom-style');
     
     // 统计信息元素
     const workDaysEl = document.getElementById('work-days');
@@ -857,6 +924,12 @@
     const monthIncomeEl = document.getElementById('month-income');
     const monthTotalAmountEl = document.getElementById('month-total-amount');
     
+    // 删除确认弹窗元素
+    const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+    const closeDeleteModalBtn = document.getElementById('close-delete-modal');
+    const cancelDeleteBtn = document.getElementById('cancel-delete');
+    const confirmDeleteBtn = document.getElementById('confirm-delete');
+    
     // 页面加载初始化
     document.addEventListener('DOMContentLoaded', () => {
         resetFilterDates();   // 重置筛选日期为"当月1日 ~ 当月最后1日"
@@ -864,15 +937,53 @@
         renderRecords();      // 渲染所有记录（含筛选逻辑）
         bindEventListeners(); // 绑定所有交互事件
         
-        // 添加款式输入监听
-        clothingStyleInput.addEventListener('change', function() {
+        // 添加款式选择事件监听
+        clothingStyleSelect.addEventListener('change', function() {
             if (this.value === '长裤') {
                 unitPriceInput.value = '7.5';
+                customStyleGroup.style.display = 'none';
             } else if (this.value === '短裤') {
                 unitPriceInput.value = '6.0';
+                customStyleGroup.style.display = 'none';
+            } else if (this.value === '衬衫') {
+                unitPriceInput.value = '8.0';
+                customStyleGroup.style.display = 'none';
+            } else if (this.value === '外套') {
+                unitPriceInput.value = '12.0';
+                customStyleGroup.style.display = 'none';
+            } else if (this.value === 'custom') {
+                customStyleGroup.style.display = 'block';
+                unitPriceInput.value = '';
             }
         });
+        
+        // 日期输入验证
+        startDateInput.addEventListener('change', validateDateRange);
+        endDateInput.addEventListener('change', validateDateRange);
     });
+    
+    // 验证日期范围
+    function validateDateRange() {
+        const startVal = startDateInput.value;
+        const endVal = endDateInput.value;
+        
+        if (!startVal || !endVal) return;
+        
+        const startDate = new Date(startVal);
+        const endDate = new Date(endVal);
+        
+        if (startDate > endDate) {
+            dateError.style.display = 'block';
+            applyFilterBtn.disabled = true;
+            applyFilterBtn.style.opacity = '0.6';
+            applyFilterBtn.style.cursor = 'not-allowed';
+        } else {
+            dateError.style.display = 'none';
+            applyFilterBtn.disabled = false;
+            applyFilterBtn.style.opacity = '1';
+            applyFilterBtn.style.cursor = 'pointer';
+        }
+    }
     
     // 绑定所有事件监听器
     function bindEventListeners() {
@@ -913,14 +1024,23 @@
         // 动态按钮委托（编辑/删除）
         tablesContainer.addEventListener('click', (e) => {
             const target = e.target;
-            if (target.classList.contains('edit-btn')) {
-                const recordId = target.getAttribute('data-id');
+            const btn = target.closest('.action-btn');
+            
+            if (!btn) return;
+            
+            const recordId = btn.getAttribute('data-id');
+            
+            if (btn.classList.contains('edit-btn')) {
                 openEditModal(recordId);
-            } else if (target.classList.contains('delete-btn')) {
-                const recordId = target.getAttribute('data-id');
-                deleteRecordHandler(recordId);
+            } else if (btn.classList.contains('delete-btn')) {
+                openDeleteModal(recordId);
             }
         });
+        
+        // 删除确认弹窗事件
+        closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+        cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+        confirmDeleteBtn.addEventListener('click', confirmDelete);
     }
     
     // 重置筛选日期为"当月1日 ~ 当月最后1日"
@@ -928,12 +1048,21 @@
         const firstDay = new Date(currentYear, currentMonth, 1);
         const lastDay = new Date(currentYear, currentMonth + 1, 0);
         
-        startDateInput.value = formatDate(firstDay);
-        endDateInput.value = formatDate(lastDay);
-        
         filterStartDate = firstDay;
         filterEndDate = lastDay;
         isFilterApplied = false;
+        
+        // 设置日期输入框的值
+        startDateInput.value = formatDate(firstDay);
+        endDateInput.value = formatDate(lastDay);
+        
+        // 重置验证状态
+        dateError.style.display = 'none';
+        applyFilterBtn.disabled = false;
+        applyFilterBtn.style.opacity = '1';
+        applyFilterBtn.style.cursor = 'pointer';
+        
+        updateMonthDisplay();
     }
     
     // 日期格式化（转为YYYY-MM-DD）
@@ -944,15 +1073,28 @@
         return `${year}-${month}-${day}`;
     }
     
+    // 日期格式化显示（YYYY/MM/DD）
+    function formatDateForDisplay(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}/${month}/${day}`;
+    }
+    
     // 更新顶部月份显示（筛选时显示范围，非筛选时显示年月）
     function updateMonthDisplay() {
         if (isFilterApplied) {
-            monthDisplay.textContent = `${formatDate(filterStartDate)} 至 ${formatDate(filterEndDate)}`;
+            const start = formatDate(filterStartDate);
+            const end = formatDate(filterEndDate);
+            monthDisplay.textContent = `${start} 至 ${end}`;
         } else {
             const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', 
                               '7月', '8月', '9月', '10月', '11月', '12月'];
             monthDisplay.textContent = `${currentYear}年${monthNames[currentMonth]}`;
         }
+        
+        // 更新收入标签
+        incomeLabel.textContent = isFilterApplied ? '当前收入' : '当月收入';
     }
     
     // -------------------- 记录数据操作 --------------------
@@ -1044,7 +1186,9 @@
         sortedDates.forEach(dateStr => {
             const dateRecords = recordsByDate[dateStr];
             const dateObj = new Date(dateStr);
-            const dateDisplay = `${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+            const month = dateObj.getMonth() + 1;
+            const day = dateObj.getDate();
+            const dateDisplay = `${month}月${day}日`;
             
             let dayPieces = 0;  // 当日总件数
             let dayIncome = 0;  // 当日总收入
@@ -1053,20 +1197,11 @@
             const dailyContainer = document.createElement('div');
             dailyContainer.className = 'daily-table-container';
             
-            // 每日表头（日期+记录数）
-            const dailyHeader = document.createElement('div');
-            dailyHeader.className = 'daily-header';
-            dailyHeader.innerHTML = `
-                <div class="daily-date">${dateDisplay}</div>
-                <div class="daily-summary">共${dateRecords.length}条记录</div>
-            `;
-            dailyContainer.appendChild(dailyHeader);
-            
             // 创建表格
             const table = document.createElement('table');
             table.className = 'records-table';
             
-            // 表格表头（增加日期列）
+            // 表格表头
             const thead = document.createElement('thead');
             thead.innerHTML = `
                 <tr>
@@ -1084,7 +1219,7 @@
             const tbody = document.createElement('tbody');
             
             // 遍历当日每条记录，生成行
-            dateRecords.forEach(record => {
+            dateRecords.forEach((record, index) => {
                 const recordTotal = record.quantity * record.unitPrice;
                 
                 // 累加统计
@@ -1094,33 +1229,51 @@
                 totalIncome += recordTotal;
                 uniqueStyles.add(record.style); // 记录款式
                 
-                // 创建行（新增日期列）
+                // 创建行
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="date-cell">${dateDisplay}</td>
-                    <td class="size-cell">${record.style}（${record.size}）</td>
-                    <td class="quantity-cell">${record.quantity}</td>
-                    <td class="price-cell">¥${record.unitPrice.toFixed(2)}</td>
-                    <td class="total-cell">¥${recordTotal.toFixed(2)}</td>
-                    <td class="action-cell">
-                        <button class="action-btn edit-btn" data-id="${record.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" data-id="${record.id}">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                `;
+                
+                // 只在第一行显示日期（合并单元格）
+                if (index === 0) {
+                    row.innerHTML = `
+                        <td class="date-cell" rowspan="${dateRecords.length}">${dateDisplay}</td>
+                        <td class="size-cell">${record.style}（${record.size}）</td>
+                        <td class="quantity-cell">${record.quantity}</td>
+                        <td class="price-cell">¥${record.unitPrice.toFixed(2)}</td>
+                        <td class="total-cell">¥${recordTotal.toFixed(2)}</td>
+                        <td class="action-cell">
+                            <button class="action-btn edit-btn" data-id="${record.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${record.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                } else {
+                    row.innerHTML = `
+                        <td class="size-cell">${record.style}（${record.size}）</td>
+                        <td class="quantity-cell">${record.quantity}</td>
+                        <td class="price-cell">¥${record.unitPrice.toFixed(2)}</td>
+                        <td class="total-cell">¥${recordTotal.toFixed(2)}</td>
+                        <td class="action-cell">
+                            <button class="action-btn edit-btn" data-id="${record.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${record.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                }
                 tbody.appendChild(row);
             });
             
-            // 当日合计行（调整列位置）
+            // 当日合计行
             workDays++; // 有记录的日期+1
             const totalRow = document.createElement('tr');
             totalRow.className = 'day-total-row';
             totalRow.innerHTML = `
-                <td class="date-cell"></td>
-                <td>当日合计</td>
+                <td colspan="2">当日合计</td>
                 <td class="price-cell">${dayPieces}件</td>
                 <td></td>
                 <td class="total-cell">¥${dayIncome.toFixed(2)}</td>
@@ -1161,6 +1314,8 @@
         clothingStyleSelect.value = '长裤';
         unitPriceInput.value = '7.5';
         document.getElementById('quantity').value = '1';
+        document.getElementById('size').value = '';
+        customStyleGroup.style.display = 'none';
         
         recordModal.style.display = 'flex';
     }
@@ -1177,9 +1332,20 @@
         
         // 回显数据
         document.getElementById('record-date').value = record.date;
-        clothingStyleSelect.value = record.style;
         document.getElementById('quantity').value = record.quantity;
         unitPriceInput.value = record.unitPrice;
+        document.getElementById('size').value = record.size;
+        
+        // 处理款式显示
+        const styleOptions = Array.from(clothingStyleSelect.options).map(opt => opt.value);
+        if (styleOptions.includes(record.style)) {
+            clothingStyleSelect.value = record.style;
+            customStyleGroup.style.display = 'none';
+        } else {
+            clothingStyleSelect.value = 'custom';
+            customStyleInput.value = record.style;
+            customStyleGroup.style.display = 'block';
+        }
         
         recordModal.style.display = 'flex';
     }
@@ -1187,17 +1353,33 @@
     // 保存记录（添加/编辑）
     function saveRecord() {
         const date = document.getElementById('record-date').value;
-        const style = clothingStyleSelect.value;
+        let style = clothingStyleSelect.value;
         const quantity = parseInt(document.getElementById('quantity').value);
         const unitPrice = parseFloat(unitPriceInput.value);
+        const size = document.getElementById('size').value;
+        
+        // 使用自定义款式名称
+        if (style === 'custom') {
+            style = document.getElementById('custom-style').value.trim();
+            if (!style) {
+                showToast('请输入款式名称！', 'error');
+                return;
+            }
+        }
         
         // 表单验证
-        if (!date || !style || isNaN(quantity) || isNaN(unitPrice) || quantity < 1) {
+        if (!date || !style || isNaN(quantity) || isNaN(unitPrice) || quantity < 1 || !size) {
             showToast('请填写有效信息！', 'error');
             return;
         }
         
-        const newRecord = { date, style, quantity, unitPrice };
+        // 验证尺码格式
+        if (!/^\d+$/.test(size)) {
+            showToast('尺码必须为数字！', 'error');
+            return;
+        }
+        
+        const newRecord = { date, style, quantity, unitPrice, size };
         
         if (editingRecordId) {
             newRecord.id = editingRecordId;
@@ -1215,16 +1397,29 @@
         renderRecords(); // 重新渲染表格
     }
     
-    // 删除记录（带确认弹窗）
-    function deleteRecordHandler(id) {
-        if (confirm('确定要删除这条记录吗？删除后不可恢复')) {
-            if (deleteRecord(id)) {
+    // 打开删除确认模态框
+    function openDeleteModal(id) {
+        recordToDelete = id;
+        deleteConfirmModal.style.display = 'flex';
+    }
+    
+    // 关闭删除确认模态框
+    function closeDeleteModal() {
+        deleteConfirmModal.style.display = 'none';
+    }
+    
+    // 确认删除
+    function confirmDelete() {
+        if (recordToDelete) {
+            if (deleteRecord(recordToDelete)) {
                 showToast('记录已删除！', 'success');
                 renderRecords(); // 重新渲染表格
             } else {
                 showToast('删除失败，请重试！', 'error');
             }
+            recordToDelete = null;
         }
+        closeDeleteModal();
     }
     
     // -------------------- 日期筛选逻辑 --------------------
