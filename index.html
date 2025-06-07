@@ -39,6 +39,7 @@
         .container {
             max-width: 100%;
             margin: 0 auto;
+            padding-bottom: 70px;
         }
         
         header {
@@ -97,17 +98,23 @@
             text-align: center;
         }
         
-        /* 日期筛选控件 */
+        /* 日期筛选控件 - 修改后 */
         .date-filter {
             display: flex;
             gap: 10px;
             margin-bottom: 12px;
-            flex-wrap: wrap;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            align-items: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
         }
         
         .date-filter-group {
-            flex: 1;
             min-width: 140px;
+            flex-shrink: 0;
         }
         
         .date-filter label {
@@ -133,13 +140,37 @@
             border-radius: 8px;
             padding: 8px 16px;
             font-size: 0.9rem;
-            margin-top: 22px;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .filter-btn:hover {
             background: var(--primary-dark);
+        }
+        
+        .clear-filter-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .clear-filter-btn:hover {
+            background: #c0392b;
         }
         
         .stats-card {
@@ -178,7 +209,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin-bottom: 70px;
+            margin-bottom: 20px;
         }
         
         .daily-table-container {
@@ -212,21 +243,20 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
-            table-layout: fixed; /* 固定表格布局 */
+            table-layout: fixed;
         }
         
-        /* 表格所有内容居中 */
         .records-table th,
         .records-table td {
             text-align: center;
-            padding: 6px 4px; /* 减少内边距 */
+            padding: 6px 4px;
         }
         
         .records-table th {
             background: var(--primary);
             color: white;
             font-weight: 600;
-            padding: 8px 4px; /* 减少内边距 */
+            padding: 8px 4px;
             position: sticky;
             top: 0;
             font-size: 12px;
@@ -239,31 +269,34 @@
             line-height: 1.3;
         }
         
-        /* 调整列宽 */
+        /* 新增日期单元格样式 */
         .date-cell {
-            width: 60px; /* 缩小日期列宽 */
+            width: 100px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
         }
         
         .size-cell {
-            width: 50px; /* 缩小尺码列宽 */
+            width: 80px;
         }
         
         .quantity-cell {
-            width: 50px; /* 缩小数量列宽 */
+            width: 50px;
         }
         
         .price-cell {
-            width: 60px; /* 缩小单价列宽 */
+            width: 60px;
         }
         
         .total-cell {
-            width: 70px; /* 缩小小计列宽 */
-            text-align: right; /* 金额右对齐 */
+            width: 70px;
+            text-align: right;
             padding-right: 8px;
         }
         
         .action-cell {
-            width: 70px; /* 缩小操作列宽 */
+            width: 70px;
             padding: 4px;
         }
         
@@ -279,7 +312,7 @@
             background: none;
             border: none;
             color: var(--gray);
-            font-size: 11px; /* 缩小按钮 */
+            font-size: 11px;
             width: 22px;
             height: 22px;
             border-radius: 50%;
@@ -304,10 +337,10 @@
         
         .add-record-btn {
             position: fixed;
-            bottom: 80px; /* 提高位置避免遮挡 */
+            bottom: 80px;
             right: 20px;
-            width: 45px; /* 缩小尺寸 */
-            height: 45px; /* 缩小尺寸 */
+            width: 45px;
+            height: 45px;
             background: var(--primary);
             color: white;
             border: none;
@@ -503,6 +536,52 @@
             font-size: 0.9rem;
         }
         
+        /* 居中Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            z-index: 1001;
+            animation: toastCenter 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .toast.success {
+            background: rgba(39, 174, 96, 0.9);
+        }
+        
+        .toast.error {
+            background: rgba(231, 76, 60, 0.9);
+        }
+        
+        @keyframes toastCenter {
+            0% { opacity: 0; transform: translate(-50%, -40px); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        /* 确认弹窗样式 */
+        .confirm-modal .modal-content {
+            max-width: 300px;
+            animation: modalOpen 0.3s ease;
+        }
+        
+        .confirm-modal .modal-body {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .confirm-modal .modal-footer {
+            justify-content: center;
+        }
+        
         @media (max-width: 480px) {
             header {
                 flex-direction: column;
@@ -520,17 +599,18 @@
             }
             
             .date-filter {
-                flex-direction: column;
+                flex-direction: row;
                 gap: 8px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
             }
             
             .date-filter-group {
-                min-width: 100%;
+                min-width: 140px;
             }
             
-            .filter-btn {
-                margin-top: 8px;
-                width: 100%;
+            .filter-btn, .clear-filter-btn {
+                width: auto;
             }
             
             .stats-card {
@@ -573,11 +653,11 @@
             }
             
             .date-cell {
-                width: 50px;
+                width: 80px;
             }
             
             .size-cell {
-                width: 40px;
+                width: 70px;
             }
             
             .quantity-cell {
@@ -611,6 +691,18 @@
                 height: 42px;
                 font-size: 1.3rem;
             }
+            
+            /* 手机端模态框居中显示 */
+            .modal {
+                align-items: center !important;
+                padding: 15px;
+            }
+            
+            .modal-content {
+                max-width: 100%;
+                margin-bottom: 0;
+                animation: modalOpen 0.3s ease !important;
+            }
         }
     </style>
 </head>
@@ -620,12 +712,12 @@
             <h1><i class="fas fa-tshirt"></i> 服装计件统计系统</h1>
             <div class="month-selector">
                 <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-                <span id="current-month">2025年06月</span>
+                <span id="current-month">2025年6月</span>
                 <button id="next-month"><i class="fas fa-chevron-right"></i></button>
             </div>
         </header>
         
-        <!-- 日期筛选控件 -->
+        <!-- 日期筛选控件（已优化） -->
         <div class="date-filter">
             <div class="date-filter-group">
                 <label for="start-date">开始日期</label>
@@ -637,6 +729,9 @@
             </div>
             <button class="filter-btn" id="apply-filter">
                 <i class="fas fa-filter"></i> 筛选
+            </button>
+            <button class="clear-filter-btn" id="clear-filter">
+                <i class="fas fa-times"></i> 清除
             </button>
         </div>
         
@@ -655,7 +750,7 @@
             </div>
             <div class="stat-item">
                 <div class="value" id="month-income">¥0</div>
-                <div class="label">本月收入</div>
+                <div class="label" id="income-label">总收入</div>
             </div>
         </div>
         
@@ -668,7 +763,7 @@
         </button>
         
         <div class="month-total">
-            <span>本月总收入：</span>
+            <span>总收入：</span>
             <span class="total-amount" id="month-total-amount">¥0.00</span>
         </div>
         
@@ -688,26 +783,28 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="clothing-size"><i class="fas fa-ruler"></i> 尺码</label>
-                                <select id="clothing-size" required>
-                                    <option value="">选择尺码</option>
-                                    <option value="XS">XS</option>
-                                    <option value="S">S</option>
-                                    <option value="M" selected>M</option>
-                                    <option value="L">L</option>
-                                    <option value="XL">XL</option>
-                                    <option value="XXL">XXL</option>
-                                    <option value="XXXL">XXXL</option>
-                                </select>
+                                <label for="clothing-style"><i class="fas fa-ruler"></i> 款式</label>
+                                <!-- 修改为支持自定义输入的datalist -->
+                                <input type="text" id="clothing-style" list="style-options" placeholder="输入或选择款式" required>
+                                <datalist id="style-options">
+                                    <option value="长裤">
+                                    <option value="短裤">
+                                </datalist>
                             </div>
+                            <div class="form-group">
+                                <label for="size"><i class="fas fa-ruler-combined"></i> 尺码</label>
+                                <input type="text" id="size" placeholder="输入尺码" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="quantity"><i class="fas fa-calculator"></i> 数量</label>
                                 <input type="number" id="quantity" min="1" value="1" required>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="unit-price"><i class="fas fa-tag"></i> 单价 (元)</label>
-                            <input type="number" id="unit-price" step="0.5" min="0" value="8.0" required>
+                            <div class="form-group">
+                                <label for="unit-price"><i class="fas fa-tag"></i> 单价 (元)</label>
+                                <input type="number" id="unit-price" step="0.5" min="0" required>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -720,450 +817,469 @@
     </div>
 
     <script>
-        // 数据存储键
-        const STORAGE_KEY = 'garment_records';
+    // 数据存储键（localStorage用）
+    const STORAGE_KEY = 'pants_records';
+    
+    // 当前日期逻辑（默认取系统时间2025-06-07）
+    const now = new Date('2025-06-07'); 
+    let currentMonth = now.getMonth();
+    let currentYear = now.getFullYear();
+    let editingRecordId = null;   // 编辑中的记录ID（null表示"添加"状态）
+    let filterStartDate = null;  // 筛选起始日期
+    let filterEndDate = null;    // 筛选结束日期
+    let isFilterApplied = false; // 是否处于筛选状态
+    
+    // DOM元素绑定
+    const monthDisplay = document.getElementById('current-month');
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    const addRecordBtn = document.getElementById('add-record');
+    const recordModal = document.getElementById('record-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const cancelRecordBtn = document.getElementById('cancel-record');
+    const saveRecordBtn = document.getElementById('save-record');
+    const tablesContainer = document.getElementById('tables-container');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    const applyFilterBtn = document.getElementById('apply-filter');
+    const clearFilterBtn = document.getElementById('clear-filter');
+    const incomeLabelEl = document.getElementById('income-label');
+    
+    // 款式输入框（已改为input）
+    const clothingStyleInput = document.getElementById('clothing-style');
+    const sizeInput = document.getElementById('size');
+    const unitPriceInput = document.getElementById('unit-price');
+    
+    // 统计信息元素
+    const workDaysEl = document.getElementById('work-days');
+    const totalPiecesEl = document.getElementById('total-pieces');
+    const totalStylesEl = document.getElementById('total-styles');
+    const monthIncomeEl = document.getElementById('month-income');
+    const monthTotalAmountEl = document.getElementById('month-total-amount');
+    
+    // 页面加载初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        resetFilterDates();   // 重置筛选日期为"当月1日 ~ 当月最后1日"
+        updateMonthDisplay(); // 更新顶部月份显示
+        renderRecords();      // 渲染所有记录（含筛选逻辑）
+        bindEventListeners(); // 绑定所有交互事件
         
-        // 当前日期处理
-        const now = new Date();
-        let currentMonth = now.getMonth();
-        let currentYear = now.getFullYear();
-        let editingRecordId = null;
-        let filterStartDate = null;
-        let filterEndDate = null;
-        
-        // DOM元素
-        const monthDisplay = document.getElementById('current-month');
-        const prevMonthBtn = document.getElementById('prev-month');
-        const nextMonthBtn = document.getElementById('next-month');
-        const addRecordBtn = document.getElementById('add-record');
-        const recordModal = document.getElementById('record-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const cancelRecordBtn = document.getElementById('cancel-record');
-        const saveRecordBtn = document.getElementById('save-record');
-        const tablesContainer = document.getElementById('tables-container');
-        const recordForm = document.getElementById('record-form');
-        const modalTitle = document.getElementById('modal-title');
-        const recordIdInput = document.getElementById('record-id');
-        const startDateInput = document.getElementById('start-date');
-        const endDateInput = document.getElementById('end-date');
-        const applyFilterBtn = document.getElementById('apply-filter');
-        
-        // 统计元素
-        const workDaysEl = document.getElementById('work-days');
-        const totalPiecesEl = document.getElementById('total-pieces');
-        const totalStylesEl = document.getElementById('total-styles');
-        const monthIncomeEl = document.getElementById('month-income');
-        const monthTotalAmountEl = document.getElementById('month-total-amount');
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            // 设置筛选日期默认值
-            const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            
-            startDateInput.value = formatDate(firstDay);
-            endDateInput.value = formatDate(lastDay);
-            
-            filterStartDate = firstDay;
-            filterEndDate = lastDay;
-            
-            updateMonthDisplay();
-            loadRecords();
-            renderRecords();
+        // 添加款式输入监听
+        clothingStyleInput.addEventListener('change', function() {
+            if (this.value === '长裤') {
+                unitPriceInput.value = '7.5';
+            } else if (this.value === '短裤') {
+                unitPriceInput.value = '6.0';
+            }
         });
-        
-        // 格式化日期为YYYY-MM-DD
-        function formatDate(date) {
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, '0');
-            const d = String(date.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-        
-        // 更新月份显示
-        function updateMonthDisplay() {
-            const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', 
-                              '7月', '8月', '9月', '10月', '11月', '12月'];
-            monthDisplay.textContent = `${currentYear}年${monthNames[currentMonth]}`;
-        }
-        
-        // 获取所有记录
-        function getRecords() {
-            const recordsJson = localStorage.getItem(STORAGE_KEY);
-            return recordsJson ? JSON.parse(recordsJson) : [];
-        }
-        
-        // 保存记录
-        function saveRecords(records) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-        }
-        
-        // 加载记录
-        function loadRecords() {
-            return getRecords();
-        }
-        
-        // 添加新记录
-        function addRecord(record) {
-            const records = getRecords();
-            record.id = Date.now().toString(); // 使用时间戳作为ID
-            records.push(record);
-            saveRecords(records);
-            return record;
-        }
-        
-        // 更新记录
-        function updateRecord(updatedRecord) {
-            const records = getRecords();
-            const index = records.findIndex(r => r.id === updatedRecord.id);
-            if (index !== -1) {
-                records[index] = updatedRecord;
-                saveRecords(records);
-                return true;
-            }
-            return false;
-        }
-        
-        // 删除记录
-        function deleteRecord(id) {
-            const records = getRecords();
-            const newRecords = records.filter(r => r.id !== id);
-            saveRecords(newRecords);
-            return newRecords.length !== records.length;
-        }
-        
-        // 渲染记录（按每日表格）
-        function renderRecords() {
-            const records = getRecords();
-            
-            // 清空容器
-            tablesContainer.innerHTML = '';
-            
-            // 过滤记录
-            const filteredRecords = records.filter(record => {
-                const recordDate = new Date(record.date);
-                return recordDate >= filterStartDate && recordDate <= filterEndDate;
-            });
-            
-            // 如果没有记录
-            if (filteredRecords.length === 0) {
-                tablesContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-tshirt"></i>
-                        <p>没有找到记录，点击下方+按钮添加</p>
-                    </div>
-                `;
-                updateStats(0, 0, 0, 0);
-                return;
-            }
-            
-            // 按日期分组
-            const recordsByDate = {};
-            filteredRecords.forEach(record => {
-                const dateStr = record.date;
-                if (!recordsByDate[dateStr]) {
-                    recordsByDate[dateStr] = [];
-                }
-                recordsByDate[dateStr].push(record);
-            });
-            
-            // 统计变量
-            let workDays = 0;
-            let totalPieces = 0;
-            let totalIncome = 0;
-            const uniqueSizes = new Set();
-            
-            // 按日期排序（倒序）
-            const sortedDates = Object.keys(recordsByDate).sort((a, b) => 
-                new Date(b) - new Date(a)
-            );
-            
-            // 生成每日表格
-            sortedDates.forEach(date => {
-                const dateRecords = recordsByDate[date];
-                const dateObj = new Date(date);
-                const dateStr = `${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
-                
-                let dayPieces = 0;
-                let dayIncome = 0;
-                
-                // 创建每日表格容器
-                const tableContainer = document.createElement('div');
-                tableContainer.className = 'daily-table-container';
-                
-                // 添加表头（日期和统计）
-                const dailyHeader = document.createElement('div');
-                dailyHeader.className = 'daily-header';
-                dailyHeader.innerHTML = `
-                    <div class="daily-date">${dateStr}</div>
-                    <div class="daily-summary">${dateRecords.length}条记录</div>
-                `;
-                tableContainer.appendChild(dailyHeader);
-                
-                // 创建表格
-                const table = document.createElement('table');
-                table.className = 'records-table';
-                
-                // 添加表头
-                const thead = document.createElement('thead');
-                thead.innerHTML = `
-                    <tr>
-                        <th class="date-cell">日期</th>
-                        <th class="size-cell">尺码</th>
-                        <th class="quantity-cell">数量</th>
-                        <th class="price-cell">单价</th>
-                        <th class="total-cell">小计</th>
-                        <th class="action-cell">操作</th>
-                    </tr>
-                `;
-                table.appendChild(thead);
-                
-                // 添加表格内容
-                const tbody = document.createElement('tbody');
-                
-                dateRecords.forEach(record => {
-                    const recordTotal = record.quantity * record.unitPrice;
-                    
-                    dayPieces += record.quantity;
-                    dayIncome += recordTotal;
-                    totalPieces += record.quantity;
-                    totalIncome += recordTotal;
-                    uniqueSizes.add(record.size);
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="date-cell">${dateStr.substr(3)}</td>
-                        <td class="size-cell">${record.size}</td>
-                        <td class="quantity-cell">${record.quantity}</td>
-                        <td class="price-cell">¥${record.unitPrice.toFixed(2)}</td>
-                        <td class="total-cell">¥${recordTotal.toFixed(2)}</td>
-                        <td class="action-cell">
-                            <button class="action-btn edit-btn" data-id="${record.id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn delete-btn" data-id="${record.id}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-                
-                // 添加当日合计行
-                workDays++;
-                const totalRow = document.createElement('tr');
-                totalRow.className = 'day-total-row';
-                totalRow.innerHTML = `
-                    <td colspan="3">当日合计</td>
-                    <td class="price-cell">${dateRecords.length}件</td>
-                    <td class="total-cell">¥${dayIncome.toFixed(2)}</td>
-                    <td></td>
-                `;
-                tbody.appendChild(totalRow);
-                
-                table.appendChild(tbody);
-                tableContainer.appendChild(table);
-                tablesContainer.appendChild(tableContainer);
-            });
-            
-            // 更新统计信息
-            updateStats(workDays, totalPieces, uniqueSizes.size, totalIncome);
-        }
-        
-        // 更新统计信息
-        function updateStats(workDays, totalPieces, totalStyles, totalIncome) {
-            workDaysEl.textContent = workDays;
-            totalPiecesEl.textContent = totalPieces;
-            totalStylesEl.textContent = totalStyles;
-            monthIncomeEl.textContent = `¥${totalIncome.toFixed(2)}`;
-            monthTotalAmountEl.textContent = `¥${totalIncome.toFixed(2)}`;
-        }
-        
-        // 打开添加记录模态框
-        function openAddModal() {
-            editingRecordId = null;
-            modalTitle.textContent = '添加计件记录';
-            recordIdInput.value = '';
-            
-            // 设置日期为今天
-            const today = new Date();
-            const formattedDate = formatDate(today);
-            document.getElementById('record-date').value = formattedDate;
-            
-            // 重置表单
-            document.getElementById('clothing-size').value = 'M';
-            document.getElementById('quantity').value = '1';
-            document.getElementById('unit-price').value = '8.0';
-            
-            recordModal.style.display = 'flex';
-        }
-        
-        // 打开编辑记录模态框
-        function openEditModal(id) {
-            const records = getRecords();
-            const record = records.find(r => r.id === id);
-            
-            if (record) {
-                editingRecordId = id;
-                modalTitle.textContent = '编辑计件记录';
-                recordIdInput.value = id;
-                
-                // 填充表单
-                document.getElementById('record-date').value = record.date;
-                document.getElementById('clothing-size').value = record.size;
-                document.getElementById('quantity').value = record.quantity;
-                document.getElementById('unit-price').value = record.unitPrice;
-                
-                recordModal.style.display = 'flex';
-            }
-        }
-        
-        // 保存记录
-        function saveRecord() {
-            const date = document.getElementById('record-date').value;
-            const size = document.getElementById('clothing-size').value;
-            const quantity = parseInt(document.getElementById('quantity').value);
-            const unitPrice = parseFloat(document.getElementById('unit-price').value);
-            
-            if (!date || !size || !quantity || !unitPrice) {
-                alert('请填写所有字段！');
-                return;
-            }
-            
-            const record = {
-                date,
-                size,
-                quantity,
-                unitPrice
-            };
-            
-            if (editingRecordId) {
-                record.id = editingRecordId;
-                if (updateRecord(record)) {
-                    alert('记录更新成功！');
-                }
-            } else {
-                addRecord(record);
-                alert('记录添加成功！');
-            }
-            
-            recordModal.style.display = 'none';
-            renderRecords();
-        }
-        
-        // 删除记录
-        function deleteRecordHandler(id) {
-            if (confirm('确定要删除这条记录吗？')) {
-                if (deleteRecord(id)) {
-                    alert('记录已删除！');
-                    renderRecords();
-                }
-            }
-        }
-        
-        // 应用日期筛选
-        function applyDateFilter() {
-            const startDate = new Date(startDateInput.value);
-            const endDate = new Date(endDateInput.value);
-            
-            if (startDate && endDate && startDate <= endDate) {
-                filterStartDate = startDate;
-                filterEndDate = endDate;
-                renderRecords();
-            } else {
-                alert('请选择有效的日期范围！');
-            }
-        }
-        
-        // 事件监听器
+    });
+    
+    // 绑定所有事件监听器
+    function bindEventListeners() {
+        // 月份切换按钮
         prevMonthBtn.addEventListener('click', () => {
             currentMonth--;
             if (currentMonth < 0) {
                 currentMonth = 11;
                 currentYear--;
             }
+            isFilterApplied = false; // 切换月份时退出筛选
+            resetFilterDates();
             updateMonthDisplay();
-            
-            // 更新日期筛选范围
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth + 1, 0);
-            
-            startDateInput.value = formatDate(firstDay);
-            endDateInput.value = formatDate(lastDay);
-            
-            filterStartDate = firstDay;
-            filterEndDate = lastDay;
-            
             renderRecords();
         });
-        
         nextMonthBtn.addEventListener('click', () => {
             currentMonth++;
             if (currentMonth > 11) {
                 currentMonth = 0;
                 currentYear++;
             }
+            isFilterApplied = false; // 切换月份时退出筛选
+            resetFilterDates();
             updateMonthDisplay();
-            
-            // 更新日期筛选范围
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth + 1, 0);
-            
-            startDateInput.value = formatDate(firstDay);
-            endDateInput.value = formatDate(lastDay);
-            
-            filterStartDate = firstDay;
-            filterEndDate = lastDay;
-            
             renderRecords();
         });
         
+        // 增删改模态框相关
         addRecordBtn.addEventListener('click', openAddModal);
-        
-        closeModalBtn.addEventListener('click', () => {
-            recordModal.style.display = 'none';
-        });
-        
-        cancelRecordBtn.addEventListener('click', () => {
-            recordModal.style.display = 'none';
-        });
-        
+        closeModalBtn.addEventListener('click', () => recordModal.style.display = 'none');
+        cancelRecordBtn.addEventListener('click', () => recordModal.style.display = 'none');
         saveRecordBtn.addEventListener('click', saveRecord);
         
+        // 日期筛选按钮
         applyFilterBtn.addEventListener('click', applyDateFilter);
+        clearFilterBtn.addEventListener('click', clearDateFilter);
         
-        // 点击模态框外部关闭
-        window.addEventListener('click', (e) => {
-            if (e.target === recordModal) {
-                recordModal.style.display = 'none';
-            }
-        });
-        
-        // 编辑和删除按钮事件委托
+        // 动态按钮委托（编辑/删除）
         tablesContainer.addEventListener('click', (e) => {
             const target = e.target;
-            
-            // 编辑按钮
-            if (target.closest('.edit-btn')) {
-                const btn = target.closest('.edit-btn');
-                const id = btn.dataset.id;
-                openEditModal(id);
+            if (target.classList.contains('edit-btn')) {
+                const recordId = target.getAttribute('data-id');
+                openEditModal(recordId);
+            } else if (target.classList.contains('delete-btn')) {
+                const recordId = target.getAttribute('data-id');
+                deleteRecordHandler(recordId);
             }
-            
-            // 删除按钮
-            if (target.closest('.delete-btn')) {
-                const btn = target.closest('.delete-btn');
-                const id = btn.dataset.id;
-                deleteRecordHandler(id);
-            }
+        });
+    }
+    
+    // 重置筛选日期为"当月1日 ~ 当月最后1日"
+    function resetFilterDates() {
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        const lastDay = new Date(currentYear, currentMonth + 1, 0);
+        
+        startDateInput.value = formatDate(firstDay);
+        endDateInput.value = formatDate(lastDay);
+        
+        filterStartDate = firstDay;
+        filterEndDate = lastDay;
+        isFilterApplied = false;
+    }
+    
+    // 日期格式化（转为YYYY-MM-DD）
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    
+    // 更新顶部月份显示（筛选时显示范围，非筛选时显示年月）
+    function updateMonthDisplay() {
+        if (isFilterApplied) {
+            monthDisplay.textContent = `${formatDate(filterStartDate)} 至 ${formatDate(filterEndDate)}`;
+        } else {
+            const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', 
+                              '7月', '8月', '9月', '10月', '11月', '12月'];
+            monthDisplay.textContent = `${currentYear}年${monthNames[currentMonth]}`;
+        }
+    }
+    
+    // -------------------- 记录数据操作 --------------------
+    // 获取所有记录（从localStorage读取）
+    function getRecords() {
+        const recordsJson = localStorage.getItem(STORAGE_KEY);
+        return recordsJson ? JSON.parse(recordsJson) : [];
+    }
+    
+    // 保存记录到localStorage
+    function saveRecords(records) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    }
+    
+    // 添加新记录
+    function addRecord(record) {
+        const records = getRecords();
+        record.id = Date.now().toString(); // 时间戳作为唯一ID
+        records.push(record);
+        saveRecords(records);
+        return record;
+    }
+    
+    // 更新记录
+    function updateRecord(updatedRecord) {
+        const records = getRecords();
+        const index = records.findIndex(r => r.id === updatedRecord.id);
+        if (index !== -1) {
+            records[index] = updatedRecord;
+            saveRecords(records);
+            return true;
+        }
+        return false;
+    }
+    
+    // 删除记录
+    function deleteRecord(id) {
+        const records = getRecords();
+        const newRecords = records.filter(r => r.id !== id);
+        saveRecords(newRecords);
+        return newRecords.length !== records.length;
+    }
+    
+    // -------------------- 渲染记录 --------------------
+    function renderRecords() {
+        const allRecords = getRecords();
+        
+        // 1. 筛选记录（仅保留在筛选日期范围内的记录）
+        const filteredRecords = allRecords.filter(record => {
+            const recordDate = new Date(record.date);
+            return recordDate >= filterStartDate && recordDate <= filterEndDate;
         });
         
-        // 表单提交处理
-        recordForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            saveRecord();
+        // 2. 无记录时显示空状态
+        if (filteredRecords.length === 0) {
+            tablesContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-tshirt"></i>
+                    <p>暂无记录，点击右下角「+」添加</p>
+                </div>
+            `;
+            updateStats(0, 0, 0, 0); // 统计清零
+            return;
+        }
+        
+        // 3. 按日期分组（日期字符串为键）
+        const recordsByDate = {};
+        filteredRecords.forEach(record => {
+            const dateStr = record.date;
+            if (!recordsByDate[dateStr]) {
+                recordsByDate[dateStr] = [];
+            }
+            recordsByDate[dateStr].push(record);
         });
-    </script>
+        
+         // 4. 日期按"倒序"排序（最新日期在前）
+        const sortedDates = Object.keys(recordsByDate).sort((a, b) => new Date(b) - new Date(a));
+        
+        // 5. 初始化统计变量
+        let workDays = 0;     // 工作天数（有记录的日期数）
+        let totalPieces = 0;  // 总件数
+        let totalIncome = 0;  // 总收入
+        const uniqueStyles = new Set(); // 去重后的款式种类
+        
+        // 清空容器，准备渲染新表格
+        tablesContainer.innerHTML = '';
+        
+        // 6. 遍历每个日期，生成每日表格
+        sortedDates.forEach(dateStr => {
+            const dateRecords = recordsByDate[dateStr];
+            const dateObj = new Date(dateStr);
+            const dateDisplay = `${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+            
+            let dayPieces = 0;  // 当日总件数
+            let dayIncome = 0;  // 当日总收入
+            
+            // 创建每日表格容器
+            const dailyContainer = document.createElement('div');
+            dailyContainer.className = 'daily-table-container';
+            
+            // 每日表头（日期+记录数）
+            const dailyHeader = document.createElement('div');
+            dailyHeader.className = 'daily-header';
+            dailyHeader.innerHTML = `
+                <div class="daily-date">${dateDisplay}</div>
+                <div class="daily-summary">共${dateRecords.length}条记录</div>
+            `;
+            dailyContainer.appendChild(dailyHeader);
+            
+            // 创建表格
+            const table = document.createElement('table');
+            table.className = 'records-table';
+            
+            // 表格表头（增加日期列）
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th class="date-cell">日期</th>
+                    <th class="size-cell">款式（尺码）</th>
+                    <th class="quantity-cell">数量</th>
+                    <th class="price-cell">单价</th>
+                    <th class="total-cell">小计</th>
+                    <th class="action-cell">操作</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+            
+            // 表格内容体
+            const tbody = document.createElement('tbody');
+            
+            // 遍历当日每条记录，生成行
+            dateRecords.forEach(record => {
+                const recordTotal = record.quantity * record.unitPrice;
+                
+                // 累加统计
+                dayPieces += record.quantity;
+                dayIncome += recordTotal;
+                totalPieces += record.quantity;
+                totalIncome += recordTotal;
+                uniqueStyles.add(record.style); // 记录款式
+                
+                // 创建行（新增日期列）
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="date-cell">${dateDisplay}</td>
+                    <td class="size-cell">${record.style}（${record.size}）</td>
+                    <td class="quantity-cell">${record.quantity}</td>
+                    <td class="price-cell">¥${record.unitPrice.toFixed(2)}</td>
+                    <td class="total-cell">¥${recordTotal.toFixed(2)}</td>
+                    <td class="action-cell">
+                        <button class="action-btn edit-btn" data-id="${record.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" data-id="${record.id}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // 当日合计行（调整列位置）
+            workDays++; // 有记录的日期+1
+            const totalRow = document.createElement('tr');
+            totalRow.className = 'day-total-row';
+            totalRow.innerHTML = `
+                <td class="date-cell"></td>
+                <td>当日合计</td>
+                <td class="price-cell">${dayPieces}件</td>
+                <td></td>
+                <td class="total-cell">¥${dayIncome.toFixed(2)}</td>
+                <td></td>
+            `;
+            tbody.appendChild(totalRow);
+            
+            table.appendChild(tbody);
+            dailyContainer.appendChild(table);
+            tablesContainer.appendChild(dailyContainer);
+        });
+        
+        // 7. 更新统计信息到页面
+        updateStats(workDays, totalPieces, uniqueStyles.size, totalIncome);
+    }
+    
+    // 更新统计信息到DOM
+    function updateStats(workDays, totalPieces, totalStyles, totalIncome) {
+        workDaysEl.textContent = workDays;
+        totalPiecesEl.textContent = totalPieces;
+        totalStylesEl.textContent = totalStyles;
+        monthIncomeEl.textContent = `¥${totalIncome.toFixed(2)}`;
+        monthTotalAmountEl.textContent = `¥${totalIncome.toFixed(2)}`;
+    }
+    
+    // -------------------- 模态框操作 --------------------
+    // 打开"添加记录"模态框
+    function openAddModal() {
+        editingRecordId = null;
+        document.getElementById('modal-title').textContent = '添加计件记录';
+        document.getElementById('record-id').value = '';
+        
+        // 默认日期为今天（2025-06-07）
+        const today = new Date('2025-06-07');
+        document.getElementById('record-date').value = formatDate(today);
+        
+        // 款式默认值设为长裤
+        clothingStyleSelect.value = '长裤';
+        unitPriceInput.value = '7.5';
+        document.getElementById('quantity').value = '1';
+        
+        recordModal.style.display = 'flex';
+    }
+    
+    // 打开"编辑记录"模态框
+    function openEditModal(id) {
+        const records = getRecords();
+        const record = records.find(r => r.id === id);
+        if (!record) return;
+        
+        editingRecordId = id;
+        document.getElementById('modal-title').textContent = '编辑计件记录';
+        document.getElementById('record-id').value = id;
+        
+        // 回显数据
+        document.getElementById('record-date').value = record.date;
+        clothingStyleSelect.value = record.style;
+        document.getElementById('quantity').value = record.quantity;
+        unitPriceInput.value = record.unitPrice;
+        
+        recordModal.style.display = 'flex';
+    }
+    
+    // 保存记录（添加/编辑）
+    function saveRecord() {
+        const date = document.getElementById('record-date').value;
+        const style = clothingStyleSelect.value;
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const unitPrice = parseFloat(unitPriceInput.value);
+        
+        // 表单验证
+        if (!date || !style || isNaN(quantity) || isNaN(unitPrice) || quantity < 1) {
+            showToast('请填写有效信息！', 'error');
+            return;
+        }
+        
+        const newRecord = { date, style, quantity, unitPrice };
+        
+        if (editingRecordId) {
+            newRecord.id = editingRecordId;
+            if (updateRecord(newRecord)) {
+                showToast('记录更新成功！', 'success');
+            } else {
+                showToast('更新失败，请重试！', 'error');
+            }
+        } else {
+            addRecord(newRecord);
+            showToast('记录添加成功！', 'success');
+        }
+        
+        recordModal.style.display = 'none';
+        renderRecords(); // 重新渲染表格
+    }
+    
+    // 删除记录（带确认弹窗）
+    function deleteRecordHandler(id) {
+        if (confirm('确定要删除这条记录吗？删除后不可恢复')) {
+            if (deleteRecord(id)) {
+                showToast('记录已删除！', 'success');
+                renderRecords(); // 重新渲染表格
+            } else {
+                showToast('删除失败，请重试！', 'error');
+            }
+        }
+    }
+    
+    // -------------------- 日期筛选逻辑 --------------------
+    // 应用日期筛选
+    function applyDateFilter() {
+        const startVal = startDateInput.value;
+        const endVal = endDateInput.value;
+        
+        if (!startVal || !endVal) {
+            showToast('请选择完整日期范围！', 'error');
+            return;
+        }
+        
+        const startDate = new Date(startVal);
+        const endDate = new Date(endVal);
+        
+        if (startDate > endDate) {
+            showToast('开始日期不能晚于结束日期！', 'error');
+            return;
+        }
+        
+        filterStartDate = startDate;
+        filterEndDate = endDate;
+        isFilterApplied = true;
+        updateMonthDisplay();
+        renderRecords();
+        showToast('筛选已应用', 'success');
+    }
+    
+    // 清除筛选（退出筛选状态）
+    function clearDateFilter() {
+        resetFilterDates(); // 重置为当月范围
+        isFilterApplied = false;
+        updateMonthDisplay();
+        renderRecords();
+        showToast('筛选已清除', 'success');
+    }
+    
+    // -------------------- 提示Toast --------------------
+    function showToast(message, type = 'success') {
+        // 移除旧Toast
+        const oldToast = document.querySelector('.toast');
+        oldToast && oldToast.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <span>${message}</span>
+        `;
+        document.body.appendChild(toast);
+        
+        // 3秒后自动消失
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
 </body>
 </html>
